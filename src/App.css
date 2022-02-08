@@ -1,38 +1,119 @@
-.App {
-  text-align: center;
+.container {
+  width: 90%;
+  margin: 0 auto;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+small {
+  font-size: 0.8rem;
+  color: #666;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.title {
+  font-weight: 600;
+  font-size: 2.4rem;
+}
+
+.intro {
+  padding: 1.6rem 0;
+}
+
+/* Menu */
+.menu-list__title {
+  margin-bottom: 0.8rem;
+}
+
+ul.menu-list__items {
+  margin: 0;
+  padding: 0;
+  margin-bottom: 4rem;
+  display: grid;
+  gap: 40px 24px;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+li.menu-list__item {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: block;
+  cursor: pointer;
+}
+
+li:hover {
+  transition-duration: 0.2s;
+  transition-timing-function: ease-in-out;
+  transition-delay: initial;
+  transition-property: box-shadow;
+
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 4px 16px;
+}
+
+.menu-list__item-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  flex: 1;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  position: relative;
+}
+
+.menu-list__item-container:hover {
+  border-color: transparent;
+}
+
+.menu-list__item-container div {
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+.menu-list__item-container .item-image {
+  height: 180px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.menu-list__item-container .item-details {
+  padding: 0.8rem;
+  line-height: 1.5rem;
+}
+
+.menu-list__item-container .item-details .item-name {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.menu-list__item-container .item-add {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  background: black;
+  padding: 0.7rem 0.75rem;
+  border-radius: 100%;
   color: white;
+  font-size: 0.9rem;
 }
 
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.menu-list__item-container .item-change {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  background: black;
+  padding: 0.7rem 0.75rem;
+  border-radius: 2rem;
+  color: white;
+  font-size: 0.9rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  font-weight: bold;
 }

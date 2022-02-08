@@ -1,0 +1,16 @@
+.navbar {
+  width: 90%;
+  margin: 0 auto;
+  padding: 1.2rem 0px;
+  background-color: white;
+  border-bottom: 1px solid #e5e5e5;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+a.logo {
+  text-decoration: none;
+  color: initial;
+}
