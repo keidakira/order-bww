@@ -5,10 +5,10 @@ import { CartContext } from "../../App";
 import styles from "./Cart.module.css";
 
 const Cart = () => {
-  const [cart, setCart] = useContext(CartContext);
+  const [cart, setCart, openCart, closeCart] = useContext(CartContext);
 
   return (
-    <div className={styles["cart"]}>
+    <div className={styles["cart"]} onClick={openCart}>
       <FontAwesomeIcon icon={faShoppingCart} />
       <span>Cart &#8226; {cart.size}</span>
     </div>

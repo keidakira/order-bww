@@ -1,0 +1,14 @@
+.btn {
+  width: 100%;
+  color: white;
+  background-color: black;
+  border: 1px solid black;
+  font-size: 1rem;
+  border-radius: 2rem;
+  padding: 1rem 2rem;
+  cursor: pointer;
+}
+
+.btn.bold {
+  font-weight: bold;
+}

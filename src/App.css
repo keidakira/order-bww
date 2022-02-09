@@ -48,7 +48,7 @@ li.menu-list__item {
   cursor: pointer;
 }
 
-li:hover {
+li.menu-list__item:hover {
   transition-duration: 0.2s;
   transition-timing-function: ease-in-out;
   transition-delay: initial;

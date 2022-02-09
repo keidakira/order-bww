@@ -6,7 +6,7 @@ import { CartContext } from "../../App";
 const MenuItem = ({ item }) => {
   const { title, image, price } = item;
 
-  const [cart, setCart] = useContext(CartContext);
+  const [cart, setCart, ...rest] = useContext(CartContext);
   const [isAdded, setIsAdded] = useState(false);
   const [count, setCount] = useState(0);
 

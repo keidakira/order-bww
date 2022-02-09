@@ -5,19 +5,29 @@ import Navbar from "./components/Navbar/Navbar";
 import "./App.css";
 import MenuItem from "./components/MenuItem/MenuItem";
 import menu from "./data/menu";
+import CartSidebar from "./components/CartSidebar/CartSidebar";
 
 const CartContext = createContext(undefined);
 
 const App = () => {
   const [data, setData] = useState([]);
   const [cart, setCart] = useState(new Map());
+  const [showCart, setShowCart] = useState(false);
 
   useEffect(() => {
     setData(menu);
   }, []);
 
+  const openCart = () => {
+    setShowCart(true);
+  };
+
+  const closeCart = () => {
+    setShowCart(false);
+  };
+
   return (
-    <CartContext.Provider value={[cart, setCart]}>
+    <CartContext.Provider value={[cart, setCart, openCart, closeCart]}>
       <div>
         <Navbar />
         <Banner image="https://media2.sacurrent.com/sacurrent/imager/u/original/26618615/screen_shot_2021-02-12_at_11.47.27_am.png" />
@@ -41,6 +51,7 @@ const App = () => {
             })}
           </div>
         </main>
+        <CartSidebar hide={showCart} />
       </div>
     </CartContext.Provider>
   );
