@@ -2,7 +2,7 @@ import React from "react";
 
 import styles from "./Button.module.css";
 
-function Button({ children, isBold }) {
+function Button({ children, isBold, onClick }) {
   let classes = ["btn"];
 
   if (isBold) {
@@ -14,7 +14,11 @@ function Button({ children, isBold }) {
     classList += styles[className] + " ";
   });
 
-  return <button className={classList}>{children}</button>;
+  return (
+    <button className={classList} onClick={onClick}>
+      {children}
+    </button>
+  );
 }
 
 export default Button;

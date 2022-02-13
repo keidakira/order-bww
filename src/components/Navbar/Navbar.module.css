@@ -14,3 +14,20 @@ a.logo {
   text-decoration: none;
   color: initial;
 }
+
+.navbar-menu {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+}
+
+.navbar-menu .logout {
+  font-weight: bold;
+  opacity: 0.5;
+  cursor: pointer;
+}
+
+.navbar-menu .logout:hover {
+  opacity: 1;
+}

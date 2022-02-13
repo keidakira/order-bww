@@ -10,6 +10,12 @@ import "./CartSidebar.css";
 // Packages
 import Decimal from "decimal.js";
 
+const submitHandler = (e) => {
+  e.preventDefault();
+
+  const form = document.getElementsByTagName("FORM")[0];
+};
+
 function CartSidebar({ hide }) {
   const [cart, setCart, openCart, closeCart] = useContext(CartContext);
   let keys = [...cart.keys()];
@@ -27,34 +33,39 @@ function CartSidebar({ hide }) {
         </span>
         <h3 className="title">Your Cart</h3>
       </div>
-      <ul className="cart-sidebar__list">
-        {keys.map((key) => {
-          let item = cart.get(key);
+      <form
+        className="checkout"
+        method="POST"
+        action="http://localhost:4242/checkout"
+        onSubmit={submitHandler}
+      >
+        <ul className="cart-sidebar__list">
+          {keys.map((key) => {
+            let item = cart.get(key);
 
-          return (
-            <li className="cart-sidebar__item" key={item.id}>
-              <div className="quantity">
-                <span>{item.quantity}</span>
-              </div>
-              <div className="details">
-                <span>{item.title}</span>
-                <span>$ {item.price}</span>
-              </div>
-              <div className="options">
-                <FontAwesomeIcon icon={faTrash} />
-              </div>
-            </li>
-          );
-        })}
-      </ul>
-      <div className="checkout">
+            return (
+              <li className="cart-sidebar__item" key={item.id}>
+                <div className="quantity">
+                  <span>{item.quantity}</span>
+                </div>
+                <div className="details">
+                  <span>{item.title}</span>
+                  <span>$ {item.price}</span>
+                </div>
+                <div className="options">
+                  <FontAwesomeIcon icon={faTrash} />
+                </div>
+              </li>
+            );
+          })}
+        </ul>
         <Button isBold>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <span>Checkout</span>
             <span>$ {total.toFixed(2)}</span>
           </div>
         </Button>
-      </div>
+      </form>
     </div>
   );
 }

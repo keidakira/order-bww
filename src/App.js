@@ -6,16 +6,29 @@ import "./App.css";
 import MenuItem from "./components/MenuItem/MenuItem";
 import menu from "./data/menu";
 import CartSidebar from "./components/CartSidebar/CartSidebar";
+import AuthPage from "./pages/AuthPage";
 
 const CartContext = createContext(undefined);
+const UserContext = createContext(undefined);
 
 const App = () => {
   const [data, setData] = useState([]);
   const [cart, setCart] = useState(new Map());
   const [showCart, setShowCart] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState({});
 
   useEffect(() => {
     setData(menu);
+
+    // Check if there is a token in localStorage
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      setIsLoggedIn(true);
+      // Set the user
+      setUser(JSON.parse(localStorage.getItem("user")));
+    }
   }, []);
 
   const openCart = () => {
@@ -27,35 +40,43 @@ const App = () => {
   };
 
   return (
-    <CartContext.Provider value={[cart, setCart, openCart, closeCart]}>
-      <div>
-        <Navbar />
-        <Banner image="https://media2.sacurrent.com/sacurrent/imager/u/original/26618615/screen_shot_2021-02-12_at_11.47.27_am.png" />
-        <main className="container">
-          <div className="intro">
-            <h1 className="title">Buffalo Wild Wings</h1>
-            <small>Open until 12:00 AM</small>
+    <UserContext.Provider value={{ user, setUser }}>
+      <CartContext.Provider
+        value={[cart, setCart, openCart, closeCart, isLoggedIn]}
+      >
+        {isLoggedIn ? (
+          <div>
+            <Navbar />
+            <Banner image="https://media2.sacurrent.com/sacurrent/imager/u/original/26618615/screen_shot_2021-02-12_at_11.47.27_am.png" />
+            <main className="container">
+              <div className="intro">
+                <h1 className="title">Buffalo Wild Wings</h1>
+                <small>Open until 12:00 AM</small>
+              </div>
+              <div className="menu">
+                {data.map((itemList, index) => {
+                  return (
+                    <div className="menu-list" key={index}>
+                      <h2 className="menu-list__title">{itemList.title}</h2>
+                      <ul className="menu-list__items">
+                        {itemList.items.map((item) => {
+                          return <MenuItem item={item} key={item.id} />;
+                        })}
+                      </ul>
+                    </div>
+                  );
+                })}
+              </div>
+            </main>
+            <CartSidebar hide={showCart} />
           </div>
-          <div className="menu">
-            {data.map((itemList, index) => {
-              return (
-                <div className="menu-list" key={index}>
-                  <h2 className="menu-list__title">{itemList.title}</h2>
-                  <ul className="menu-list__items">
-                    {itemList.items.map((item) => {
-                      return <MenuItem item={item} key={item.id} />;
-                    })}
-                  </ul>
-                </div>
-              );
-            })}
-          </div>
-        </main>
-        <CartSidebar hide={showCart} />
-      </div>
-    </CartContext.Provider>
+        ) : (
+          <AuthPage />
+        )}
+      </CartContext.Provider>
+    </UserContext.Provider>
   );
 };
 
 export default App;
-export { CartContext };
+export { CartContext, UserContext };
