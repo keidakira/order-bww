@@ -3,8 +3,19 @@ const express = require("express");
 const router = express.Router();
 
 const User = require("../models/User");
+const jwt = require("jsonwebtoken");
+const userMiddleware = require("../middleware/User");
 
-// User exists
+const dotenv = require("dotenv");
+dotenv.config();
+
+/**
+ * Check if email is already registered
+ *
+ * @param {string} email
+ *
+ * @returns {boolean} true if email is already registered
+ */
 router.get("/user/exists/:email", (req, res) => {
   User.findOne({ email: req.params.email }, (err, user) => {
     if (err) {
@@ -19,8 +30,15 @@ router.get("/user/exists/:email", (req, res) => {
   });
 });
 
-// Login Route
-router.post("/login", (req, res) => {
+/**
+ * Login user
+ *
+ * @param {string} email
+ * @param {string} password
+ *
+ * @returns {User, token} User object and token
+ */
+router.post("/login", userMiddleware.loginUser, (req, res) => {
   const { email, password } = req.body;
 
   User.findOne({ email: email }, (err, user) => {
@@ -39,7 +57,9 @@ router.post("/login", (req, res) => {
         error: "Email and password do not match",
       });
     }
-    const token = "fake-jwt-token";
+
+    const token = jwt.sign(user._doc, process.env.JWT_SECRET);
+
     return res.status(200).json({
       ...user._doc,
       token: token,
@@ -47,8 +67,17 @@ router.post("/login", (req, res) => {
   });
 });
 
-// Signup Route
-router.post("/user/create", (req, res) => {
+/**
+ * Register user
+ *
+ * @param {string} email
+ * @param {string} password
+ * @param {string} name
+ * @param {string} nickname
+ *
+ * @returns {User, token} User object and token
+ */
+router.post("/user/create", userMiddleware.createUser, (req, res) => {
   const { name, password, email } = req.body;
   const user = new User({
     name: name,
@@ -61,7 +90,10 @@ router.post("/user/create", (req, res) => {
     if (err) {
       res.status(400).json({ error: "Email already exists" });
     } else {
-      res.json({ result, token: "fake-jwt-token" });
+      res.json({
+        result,
+        token: jwt.sign(result._doc, process.env.JWT_SECRET),
+      });
     }
   });
 });

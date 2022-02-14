@@ -28,9 +28,11 @@ mongoose
 
 // Routes
 const authRoutes = require("./routes/Auth");
+const itemRoutes = require("./routes/Item");
 
 // Usage of routes
 app.use("/api/auth", authRoutes);
+app.use("/api/items", itemRoutes);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
