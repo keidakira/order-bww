@@ -1,11 +1,13 @@
 // Item modal
 const mongoose = require("mongoose");
+const MenuCategory = require("./MenuCategory");
 
 const ItemSchema = new mongoose.Schema(
   {
     title: {
       type: String,
       required: true,
+      unique: true,
     },
     price: {
       type: Number,
@@ -15,8 +17,13 @@ const ItemSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    category: {
+      type: mongoose.Schema.ObjectId,
+      ref: "MenuCategory",
+      required: true,
+    },
   },
   { timestamps: true }
 );
 
-module.exports = Item = mongoose.model("item", ItemSchema);
+module.exports = Item = mongoose.model("Item", ItemSchema);

@@ -75,7 +75,7 @@ router.post("/login", userMiddleware.loginUser, (req, res) => {
  * @param {string} name
  * @param {string} nickname
  *
- * @returns {User, token} User object and token
+ * @returns {...User, token} User object contents and token
  */
 router.post("/user/create", userMiddleware.createUser, (req, res) => {
   const { name, password, email } = req.body;
@@ -86,13 +86,13 @@ router.post("/user/create", userMiddleware.createUser, (req, res) => {
     email: email,
   });
 
-  user.save((err, result) => {
+  user.save((err, user) => {
     if (err) {
       res.status(400).json({ error: "Email already exists" });
     } else {
       res.json({
-        result,
-        token: jwt.sign(result._doc, process.env.JWT_SECRET),
+        ...user._doc,
+        token: jwt.sign(user._doc, process.env.JWT_SECRET),
       });
     }
   });

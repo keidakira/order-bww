@@ -8,6 +8,7 @@ const router = express.Router();
 
 const Item = require("../models/Item");
 const itemMiddleware = require("../middleware/Item");
+const MenuCategory = require("../models/MenuCategory");
 
 /**
  * All available routes for items
@@ -62,17 +63,23 @@ router.get("/:id", itemMiddleware.checkItemId, async (request, response) => {
  * @param {string} title - item's title
  * @param {number} price - item's price
  * @param {string} image - item's image
+ * @param {MenuCategory._id} category - item's category
  *
  * @returns {Item} - Item object
  */
 router.post("/", itemMiddleware.createItem, async (request, response) => {
-  const { title, price, image } = request.body;
+  const { title, price, image, category } = request.body;
 
   const newItem = await new Item({
     title,
     price,
     image,
+    category,
   }).save();
+
+  const res = await MenuCategory.findByIdAndUpdate(category, {
+    $push: { items: newItem._id },
+  });
 
   return response.json(newItem);
 });

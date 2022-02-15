@@ -29,10 +29,12 @@ mongoose
 // Routes
 const authRoutes = require("./routes/Auth");
 const itemRoutes = require("./routes/Item");
+const menuCategoriesRoutes = require("./routes/MenuCategory");
 
 // Usage of routes
 app.use("/api/auth", authRoutes);
 app.use("/api/items", itemRoutes);
+app.use("/api/menu-categories", menuCategoriesRoutes);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");

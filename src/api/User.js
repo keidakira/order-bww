@@ -8,7 +8,14 @@ class User {
   };
 
   createUser = async (user) => {
-    const response = await client.post("/auth/user/create", user);
+    const newUser = {
+      email: user.email,
+      password: user.password,
+      name: user.name,
+      nickname: user.name.split(" ")[0],
+    };
+
+    const response = await client.post("/auth/user/create", newUser);
     return response;
   };
 

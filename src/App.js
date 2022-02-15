@@ -4,9 +4,10 @@ import Banner from "./components/Banner/Banner";
 import Navbar from "./components/Navbar/Navbar";
 import "./App.css";
 import MenuItem from "./components/MenuItem/MenuItem";
-import menu from "./data/menu";
 import CartSidebar from "./components/CartSidebar/CartSidebar";
 import AuthPage from "./pages/AuthPage";
+
+import MenuCategory from "./api/MenuCategory";
 
 const CartContext = createContext(undefined);
 const UserContext = createContext(undefined);
@@ -19,7 +20,15 @@ const App = () => {
   const [user, setUser] = useState({});
 
   useEffect(() => {
-    setData(menu);
+    const menuCategories = new MenuCategory();
+
+    const getAllMenuCategories = async () => {
+      const response = await menuCategories.getAllMenuCategories();
+
+      setData(response.data);
+    };
+
+    getAllMenuCategories();
 
     // Check if there is a token in localStorage
     const token = localStorage.getItem("token");
@@ -56,11 +65,11 @@ const App = () => {
               <div className="menu">
                 {data.map((itemList, index) => {
                   return (
-                    <div className="menu-list" key={index}>
-                      <h2 className="menu-list__title">{itemList.title}</h2>
+                    <div className="menu-list" key={itemList._id}>
+                      <h2 className="menu-list__title">{itemList.name}</h2>
                       <ul className="menu-list__items">
                         {itemList.items.map((item) => {
-                          return <MenuItem item={item} key={item.id} />;
+                          return <MenuItem item={item} key={item._id} />;
                         })}
                       </ul>
                     </div>
