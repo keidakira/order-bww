@@ -1,7 +1,7 @@
 const itemSchemas = require("../validations/Item");
 
 class ItemMiddleware {
-  // Check if id is valid
+  // Check if item id from params is valid
   checkItemId = (request, response, next) => {
     const { error, value } = itemSchemas.id.validate(request.params.id);
 

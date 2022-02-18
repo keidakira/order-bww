@@ -8,13 +8,14 @@ import CartSidebar from "./components/CartSidebar/CartSidebar";
 import AuthPage from "./pages/AuthPage";
 
 import MenuCategory from "./api/MenuCategory";
+import DraftCartAPI from "./api/DraftCart";
 
 const CartContext = createContext(undefined);
 const UserContext = createContext(undefined);
 
 const App = () => {
   const [data, setData] = useState([]);
-  const [cart, setCart] = useState(new Map());
+  const [cart, setCart] = useState({ items: [], total: 0 });
   const [showCart, setShowCart] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState({});
@@ -28,7 +29,14 @@ const App = () => {
       setData(response.data);
     };
 
+    const getDraftCart = async () => {
+      const response = await DraftCartAPI.getDraftCart();
+
+      setCart(response.data.draftCart);
+    };
+
     getAllMenuCategories();
+    getDraftCart();
 
     // Check if there is a token in localStorage
     const token = localStorage.getItem("token");

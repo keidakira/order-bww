@@ -43,7 +43,7 @@
 .cart-sidebar__item {
   list-style: none;
   display: grid;
-  grid-template-columns: 2.5rem 1fr 2rem;
+  grid-template-columns: 2.5rem 1fr 2.5rem;
   gap: 8px;
   align-items: center;
   border-bottom: 1px solid #e6e6e6;
@@ -79,4 +79,17 @@
   position: absolute;
   left: 0;
   bottom: 3rem;
+}
+
+.cart-sidebar .cart-sidebar__item .options {
+  cursor: pointer;
+  text-align: center;
+  width: 2.3rem;
+  height: 2.3rem;
+  line-height: 2.3rem;
+  border-radius: 50%;
+}
+
+.cart-sidebar .cart-sidebar__item .options:hover {
+  background-color: #e6e6e6;
 }

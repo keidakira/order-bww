@@ -1,14 +1,12 @@
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useContext } from "react";
+import DraftCartAPI from "../../api/DraftCart.js";
 import { CartContext } from "../../App.js";
 import Button from "../UI/Button/Button.jsx";
 
 // Styles
 import "./CartSidebar.css";
-
-// Packages
-import Decimal from "decimal.js";
 
 const submitHandler = (e) => {
   e.preventDefault();
@@ -18,12 +16,15 @@ const submitHandler = (e) => {
 
 function CartSidebar({ hide }) {
   const [cart, setCart, openCart, closeCart] = useContext(CartContext);
-  let keys = [...cart.keys()];
-  let total = new Decimal(0);
-  keys.forEach((key) => {
-    let b = new Decimal(cart.get(key).price * cart.get(key).quantity);
-    total = total.plus(b);
-  });
+  let { items, total } = cart;
+
+  const removeItem = async (id) => {
+    let response = await DraftCartAPI.updateDraftCart(id, 0);
+
+    response = await DraftCartAPI.getDraftCart();
+
+    setCart(response.data.draftCart);
+  };
 
   return (
     <div className={"cart-sidebar " + (hide && "open")}>
@@ -40,19 +41,19 @@ function CartSidebar({ hide }) {
         onSubmit={submitHandler}
       >
         <ul className="cart-sidebar__list">
-          {keys.map((key) => {
-            let item = cart.get(key);
+          {items.map((itemObject) => {
+            let item = itemObject.item;
 
             return (
-              <li className="cart-sidebar__item" key={item.id}>
+              <li className="cart-sidebar__item" key={item._id}>
                 <div className="quantity">
-                  <span>{item.quantity}</span>
+                  <span>{itemObject.quantity}</span>
                 </div>
                 <div className="details">
                   <span>{item.title}</span>
                   <span>$ {item.price}</span>
                 </div>
-                <div className="options">
+                <div className="options" onClick={() => removeItem(item._id)}>
                   <FontAwesomeIcon icon={faTrash} />
                 </div>
               </li>
@@ -62,7 +63,7 @@ function CartSidebar({ hide }) {
         <Button isBold>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <span>Checkout</span>
-            <span>$ {total.toFixed(2)}</span>
+            <span>$ {parseFloat(total).toFixed(2)}</span>
           </div>
         </Button>
       </form>

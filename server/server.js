@@ -3,18 +3,12 @@ const app = express();
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
+const cors = require("cors");
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 dotenv.config();
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000"); // update to match the domain you will make the request from
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  next();
-});
+app.use(cors());
 
 const PORT = process.env.PORT || 4242;
 
@@ -30,11 +24,13 @@ mongoose
 const authRoutes = require("./routes/Auth");
 const itemRoutes = require("./routes/Item");
 const menuCategoriesRoutes = require("./routes/MenuCategory");
+const draftCartRoutes = require("./routes/DraftCart");
 
 // Usage of routes
 app.use("/api/auth", authRoutes);
 app.use("/api/items", itemRoutes);
 app.use("/api/menu-categories", menuCategoriesRoutes);
+app.use("/api/draft-cart", draftCartRoutes);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");

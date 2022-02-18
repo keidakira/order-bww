@@ -1,6 +1,7 @@
 import { faMinus, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import DraftCartAPI from "../../api/DraftCart";
 import { CartContext } from "../../App";
 
 const MenuItem = ({ item }) => {
@@ -10,42 +11,90 @@ const MenuItem = ({ item }) => {
   const [isAdded, setIsAdded] = useState(false);
   const [count, setCount] = useState(0);
 
-  const addToCart = () => {
+  // Use this hook to update the cart state of + or - items
+  const [changing, setChanging] = useState(false);
+
+  useEffect(() => {
+    const itemInCart = cart.items.find(({ item }) => item.title === title);
+
+    if (itemInCart) {
+      setCount(itemInCart.quantity);
+      setIsAdded(true);
+    } else {
+      setCount(0);
+      setIsAdded(false);
+    }
+  }, [cart]);
+
+  const addToCart = async () => {
     // If item already exists in cart, increase quantity
     // else add item to cart
+    if (changing) return;
 
-    let cartCopy = new Map(cart);
+    setChanging(true);
 
-    if (cartCopy.has(item.id)) {
-      cartCopy.get(item.id).quantity += 1;
-    } else {
-      cartCopy.set(item.id, { ...item, quantity: 1 });
+    const itemId = item._id;
+    let quantity = 1;
+    let response = undefined;
+
+    const itemInCart = cart.items.find(({ item }) => item.title === title);
+
+    if (itemInCart) {
+      quantity = itemInCart.quantity + 1;
     }
 
-    setCart(cartCopy);
+    // If cart is empty, create a new cart
+    // else update existing cart
+
+    if (cart.items.length === 0) {
+      response = await DraftCartAPI.createDraftCart(itemId, quantity);
+    } else {
+      response = await DraftCartAPI.updateDraftCart(itemId, quantity);
+    }
+
+    response = await DraftCartAPI.getDraftCart();
+
+    setCart(response.data.draftCart);
     setIsAdded(true);
     setCount(count + 1);
+    setChanging(false);
   };
 
-  const removeFromCart = () => {
+  const removeFromCart = async () => {
     // If item exists in cart, decrease quantity
-    let cartCopy = new Map(cart);
+    // else remove item from cart
 
-    if (cartCopy.has(item.id)) {
-      cartCopy.get(item.id).quantity--;
-      if (cartCopy.get(item.id).quantity === 0) {
-        cartCopy.delete(item.id);
-      }
+    if (changing) return;
+    setChanging(true);
+
+    const itemId = item._id;
+    let quantity = 0;
+    let response = undefined;
+
+    const itemInCart = cart.items.find(({ item }) => item.title === title);
+
+    if (itemInCart) {
+      quantity = itemInCart.quantity - 1;
     }
 
-    setCart(cartCopy);
-    setIsAdded(count - 1 !== 0);
+    // If cart is empty, create a new cart
+    // else update existing cart
+
+    if (cart.items.length !== 0) {
+      response = await DraftCartAPI.updateDraftCart(itemId, quantity);
+    }
+
+    response = await DraftCartAPI.getDraftCart();
+
+    setCart(response.data.draftCart);
+    setIsAdded(count - 1 > 0);
     setCount(count - 1);
+    setChanging(false);
   };
 
   let addItem = (
-    <span className="item-add">
-      <FontAwesomeIcon icon={faPlus} onClick={addToCart} />
+    <span className="item-add" onClick={addToCart}>
+      <FontAwesomeIcon icon={faPlus} />
     </span>
   );
 

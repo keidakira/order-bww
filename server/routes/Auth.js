@@ -3,11 +3,21 @@ const express = require("express");
 const router = express.Router();
 
 const User = require("../models/User");
-const jwt = require("jsonwebtoken");
+const JWT = require("../helpers/JWT");
 const userMiddleware = require("../middleware/User");
 
-const dotenv = require("dotenv");
-dotenv.config();
+const jwtHelper = new JWT();
+
+/**
+ * All available routes for items
+ *
+ * Base URL: /api/auth
+ *
+ * Routes:
+ * POST  /api/auth/login - login user
+ * POST  /api/auth/register - register user
+ * GET  /api/auth/user/exists/:email - check if user exists
+ */
 
 /**
  * Check if email is already registered
@@ -58,7 +68,7 @@ router.post("/login", userMiddleware.loginUser, (req, res) => {
       });
     }
 
-    const token = jwt.sign(user._doc, process.env.JWT_SECRET);
+    const token = jwtHelper.encode(user._doc);
 
     return res.status(200).json({
       ...user._doc,
@@ -77,7 +87,7 @@ router.post("/login", userMiddleware.loginUser, (req, res) => {
  *
  * @returns {...User, token} User object contents and token
  */
-router.post("/user/create", userMiddleware.createUser, (req, res) => {
+router.post("/register", userMiddleware.createUser, (req, res) => {
   const { name, password, email } = req.body;
   const user = new User({
     name: name,
@@ -92,7 +102,7 @@ router.post("/user/create", userMiddleware.createUser, (req, res) => {
     } else {
       res.json({
         ...user._doc,
-        token: jwt.sign(user._doc, process.env.JWT_SECRET),
+        token: jwtHelper.encode(user._doc),
       });
     }
   });

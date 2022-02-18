@@ -10,7 +10,7 @@ const Cart = () => {
   return (
     <div className={styles["cart"]} onClick={openCart}>
       <FontAwesomeIcon icon={faShoppingCart} />
-      <span>Cart &#8226; {cart.size}</span>
+      <span>Cart &#8226; {cart.items.length}</span>
     </div>
   );
 };
