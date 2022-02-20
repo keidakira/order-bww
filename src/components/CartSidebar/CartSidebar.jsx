@@ -8,12 +8,6 @@ import Button from "../UI/Button/Button.jsx";
 // Styles
 import "./CartSidebar.css";
 
-const submitHandler = (e) => {
-  e.preventDefault();
-
-  const form = document.getElementsByTagName("FORM")[0];
-};
-
 function CartSidebar({ hide }) {
   const [cart, setCart, openCart, closeCart] = useContext(CartContext);
   let { items, total } = cart;
@@ -37,8 +31,7 @@ function CartSidebar({ hide }) {
       <form
         className="checkout"
         method="POST"
-        action="http://localhost:4242/checkout"
-        onSubmit={submitHandler}
+        action="http://localhost:4242/api/checkout"
       >
         <ul className="cart-sidebar__list">
           {items.map((itemObject) => {
@@ -60,6 +53,11 @@ function CartSidebar({ hide }) {
             );
           })}
         </ul>
+        <input
+          type="hidden"
+          name="userToken"
+          value={localStorage.getItem("token")}
+        />
         <Button isBold>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <span>Checkout</span>

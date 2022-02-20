@@ -1,5 +1,6 @@
 const userSchemas = require("../validations/User");
 const JWT = require("../helpers/JWT");
+const DraftCart = require("../models/DraftCart");
 const jwtHelper = new JWT();
 class UserMiddleware {
   // Validate JWT from Request Header
@@ -56,6 +57,19 @@ class UserMiddleware {
 
       return response.status(400).json({ message: errorMessage });
     }
+
+    next();
+  };
+
+  // Get User's Cart
+  getCart = async (request, response, next) => {
+    const { user } = request;
+
+    const cart = await DraftCart.findOne({ user: user._id }).populate(
+      "items.item"
+    );
+
+    request.cart = cart;
 
     next();
   };

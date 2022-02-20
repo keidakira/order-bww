@@ -9,6 +9,7 @@ import AuthPage from "./pages/AuthPage";
 
 import MenuCategory from "./api/MenuCategory";
 import DraftCartAPI from "./api/DraftCart";
+import Checkout from "./pages/Checkout";
 
 const CartContext = createContext(undefined);
 const UserContext = createContext(undefined);
@@ -55,6 +56,18 @@ const App = () => {
   const closeCart = () => {
     setShowCart(false);
   };
+
+  if (window.location.pathname === "/checkout") {
+    return (
+      <UserContext.Provider value={{ user, setUser }}>
+        <CartContext.Provider
+          value={[cart, setCart, openCart, closeCart, isLoggedIn]}
+        >
+          <Checkout />
+        </CartContext.Provider>
+      </UserContext.Provider>
+    );
+  }
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
