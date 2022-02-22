@@ -1,0 +1,15 @@
+.container {
+  width: 100%;
+}
+
+.container.center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.container .result {
+  font-weight: 500;
+  font-size: 2rem;
+}
