@@ -1,7 +1,6 @@
 import { useContext } from "react";
 import { UserContext } from "../../App";
 import Cart from "../Cart/Cart";
-import Button from "../UI/Button/Button";
 import Logo from "../UI/Logo";
 import styles from "./Navbar.module.css";
 
@@ -24,10 +23,17 @@ const Navbar = () => {
       </div>
       <div className={styles["navbar-menu"]}>
         <p>Hi, {user.nickname}!</p>
+        <a href="/orders" className={styles["navbar-item"]}>
+          <p>Orders</p>
+        </a>
         <Cart />
-        <p className={styles["logout"]} onClick={handleLogout}>
-          Logout
-        </p>
+        <a
+          onClick={handleLogout}
+          className={styles["navbar-item"]}
+          href="/logout"
+        >
+          <p className={styles["navbar-item"]}>Logout</p>
+        </a>
       </div>
     </nav>
   );

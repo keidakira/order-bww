@@ -2,6 +2,7 @@
 const express = require("express");
 const userMiddleware = require("../middleware/User");
 const DraftCart = require("../models/DraftCart");
+const Order = require("../models/Order");
 const PaymentSession = require("../models/PaymentSession");
 const router = express.Router();
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
@@ -83,8 +84,21 @@ router.get("/status", async (req, res) => {
     });
     status = "success";
 
-    // Clear the cart
-    await DraftCart.deleteOne({ user: paymentSession.user });
+    const draftCart = await DraftCart.findOne({
+      user: paymentSession.user,
+    });
+
+    // Create a new order and save it
+    const order = new Order({
+      user: paymentSession.user,
+      items: draftCart.items,
+      paymentSession: paymentSessionId,
+    });
+
+    await order.save();
+
+    // Remove the draft cart
+    await DraftCart.findByIdAndDelete(draftCart._id);
   } else {
     // Cancel the paymentSession
     await PaymentSession.findByIdAndUpdate(paymentSessionId, {

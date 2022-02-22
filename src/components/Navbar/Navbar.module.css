@@ -9,7 +9,7 @@
   align-items: center;
 }
 
-a.logo {
+a {
   text-decoration: none;
   color: initial;
 }
@@ -21,12 +21,10 @@ a.logo {
   gap: 2rem;
 }
 
-.navbar-menu .logout {
-  font-weight: bold;
-  opacity: 0.5;
+.navbar-item {
   cursor: pointer;
 }
 
-.navbar-menu .logout:hover {
-  opacity: 1;
+.navbar-item:hover {
+  color: cornflowerblue;
 }

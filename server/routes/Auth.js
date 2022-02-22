@@ -5,6 +5,7 @@ const router = express.Router();
 const User = require("../models/User");
 const JWT = require("../helpers/JWT");
 const userMiddleware = require("../middleware/User");
+const Order = require("../models/Order");
 
 const jwtHelper = new JWT();
 
@@ -105,6 +106,24 @@ router.post("/register", userMiddleware.createUser, (req, res) => {
         token: jwtHelper.encode(user._doc),
       });
     }
+  });
+});
+
+/**
+ * Get user orders
+ *
+ * @param {string} userToken
+ *
+ * @returns {Order[]} User orders
+ */
+router.get("/orders/:id", async (req, res) => {
+  const user = req.params.id;
+  const orders = await Order.find({ user: user })
+    .populate("items.item paymentSession")
+    .sort({ createdAt: -1 });
+
+  res.status(200).json({
+    orders,
   });
 });
 

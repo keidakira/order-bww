@@ -12,6 +12,7 @@ import DraftCartAPI from "./api/DraftCart";
 import Checkout from "./pages/Checkout";
 import Success from "./pages/Success";
 import Cancelled from "./pages/Cancelled";
+import Orders from "./pages/Orders";
 
 const CartContext = createContext(undefined);
 const UserContext = createContext(undefined);
@@ -91,6 +92,19 @@ const App = () => {
           value={[cart, setCart, openCart, closeCart, isLoggedIn]}
         >
           <Cancelled />
+          <CartSidebar hide={showCart} />
+        </CartContext.Provider>
+      </UserContext.Provider>
+    );
+  }
+
+  if (window.location.pathname === "/orders") {
+    return (
+      <UserContext.Provider value={{ user, setUser }}>
+        <CartContext.Provider
+          value={[cart, setCart, openCart, closeCart, isLoggedIn]}
+        >
+          <Orders />
           <CartSidebar hide={showCart} />
         </CartContext.Provider>
       </UserContext.Provider>

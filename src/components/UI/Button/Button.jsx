@@ -2,11 +2,15 @@ import React from "react";
 
 import styles from "./Button.module.css";
 
-function Button({ children, isBold, onClick }) {
+function Button({ children, isBold, onClick, outlined }) {
   let classes = ["btn"];
 
   if (isBold) {
     classes.push("bold");
+  }
+
+  if (outlined) {
+    classes.push("btn-outlined");
   }
 
   let classList = "";
