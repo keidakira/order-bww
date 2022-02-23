@@ -26,6 +26,7 @@ const itemRoutes = require("./routes/Item");
 const menuCategoriesRoutes = require("./routes/MenuCategory");
 const draftCartRoutes = require("./routes/DraftCart");
 const checkoutRoutes = require("./routes/Checkout");
+const stripeRoutes = require("./routes/Stripe");
 
 // Usage of routes
 app.use("/api/auth", authRoutes);
@@ -33,6 +34,7 @@ app.use("/api/items", itemRoutes);
 app.use("/api/menu-categories", menuCategoriesRoutes);
 app.use("/api/draft-cart", draftCartRoutes);
 app.use("/api/checkout", checkoutRoutes);
+app.use("/api/stripe", stripeRoutes);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
